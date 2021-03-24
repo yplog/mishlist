@@ -13,11 +13,10 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
-import env from "react-dotenv";
 
 import Copyright from "../components/copyright";
 
-const apiUrl = env.API_URL || "http://localhost:3001/api";
+const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3001/api";
 
 const useStyles = makeStyles((theme) => ({
   paper: {

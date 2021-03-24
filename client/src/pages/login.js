@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -13,11 +13,11 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
-import env from "react-dotenv";
 
+import { AuthContext } from "../context/auth-context";
 import Copyright from "../components/copyright";
 
-const apiUrl = env.API_URL || "http://localhost:3001/api";
+const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3001/api";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,6 +53,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Login() {
+  const auth = useContext(AuthContext);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -67,8 +69,10 @@ export default function Login() {
         password: password,
       })
       .then((response) => {
-        console.log("response", response);
+        console.log("response", response.data);
+        console.log(response.data.token, response.data.user);
         clearState();
+        auth.login(response.data.token, response.data.user);
       })
       .catch((error) => {
         console.log("error", error);
