@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useCallback, useState, useEffect } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -12,32 +12,10 @@ import Login from "./pages/login";
 import SignUp from "./pages/signUp";
 import User from "./pages/user";
 import { AuthContext } from "../src/context/auth-context";
+import { useAuth } from "../src/hooks/auth-hook";
 
 const App = () => {
-  const [token, setToken] = useState(null);
-  const [user, setUser] = useState(null);
-
-  const login = useCallback((token, user) => {
-    setToken(token);
-    setUser(user);
-    localStorage.setItem(
-      "userData",
-      JSON.stringify({ token: token, user: user })
-    );
-  }, []);
-
-  const logout = useCallback(() => {
-    setToken(null);
-    setUser(null);
-    localStorage.removeItem("userData");
-  }, []);
-
-  useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem("userData"));
-    if (storedData && storedData.token && storedData.user) {
-      login(storedData.token, storedData.user);
-    }
-  }, [login]);
+  const { token, login, logout, user } = useAuth();
 
   let routes;
   if (token && user) {
